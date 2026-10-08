@@ -1,0 +1,620 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAKU ✦ Universo</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #02000b;
+    font-family: Arial, sans-serif;
+}
+
+#app {
+    position: fixed;
+    inset: 0;
+}
+
+/* INTRO */
+#intro {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    color: white;
+    background: #02000b;
+    font-size: clamp(22px, 4vw, 45px);
+    letter-spacing: 6px;
+    transition: opacity 1.5s ease;
+}
+
+#intro span {
+    display: block;
+    margin-top: 15px;
+    font-size: 13px;
+    letter-spacing: 3px;
+    opacity: .65;
+}
+
+/* SAKU */
+#name {
+    position: fixed;
+    z-index: 5;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    color: white;
+    font-size: clamp(55px, 10vw, 125px);
+    font-weight: 900;
+    letter-spacing: 18px;
+    padding-left: 18px;
+
+    text-shadow:
+        0 0 12px white,
+        0 0 28px #ff8fd8,
+        0 0 60px #ff3cac,
+        0 0 100px #ff1493;
+
+    animation: pulse 2.5s ease-in-out infinite;
+
+    pointer-events: none;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: .9;
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.06);
+        opacity: 1;
+    }
+}
+
+/* FRASES */
+.phrase {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+
+    z-index: 4;
+
+    color: white;
+    font-size: clamp(12px, 1.5vw, 19px);
+    white-space: nowrap;
+
+    text-shadow:
+        0 0 8px white,
+        0 0 18px #ff69c9;
+
+    pointer-events: none;
+
+    animation:
+        orbit var(--speed) linear infinite;
+}
+
+@keyframes orbit {
+
+    from {
+        transform:
+            rotate(0deg)
+            translateX(var(--radius))
+            rotate(0deg);
+    }
+
+    to {
+        transform:
+            rotate(360deg)
+            translateX(var(--radius))
+            rotate(-360deg);
+    }
+
+}
+
+#hint {
+    position: fixed;
+    z-index: 6;
+
+    bottom: 18px;
+    width: 100%;
+
+    text-align: center;
+
+    color: rgba(255,255,255,.55);
+    font-size: 12px;
+    letter-spacing: 2px;
+
+    pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="app"></div>
+
+<!-- INTRO -->
+<div id="intro">
+    PREPARANDO EL UNIVERSO
+    <span>para SAKU ✦</span>
+</div>
+
+<!-- NOMBRE -->
+<div id="name">SAKU</div>
+
+<!-- FRASES -->
+<div class="phrase"
+     style="--radius:210px; --speed:17s;">
+    Te amo 💗
+</div>
+
+<div class="phrase"
+     style="--radius:290px; --speed:22s;">
+    Te quiero ✨
+</div>
+
+<div class="phrase"
+     style="--radius:370px; --speed:27s;">
+    Quiero estar contigo para siempre 💕
+</div>
+
+<div class="phrase"
+     style="--radius:450px; --speed:32s;">
+    Eres muy especial para mí 🌸
+</div>
+
+<div class="phrase"
+     style="--radius:260px; --speed:20s;">
+    Gracias por llegar a mi vida 💖
+</div>
+
+<div class="phrase"
+     style="--radius:340px; --speed:25s;">
+    Me haces muy feliz ✨
+</div>
+
+<div class="phrase"
+     style="--radius:420px; --speed:30s;">
+    Siempre pienso en ti 💫
+</div>
+
+<div class="phrase"
+     style="--radius:500px; --speed:35s;">
+    Me encanta estar contigo 💗
+</div>
+
+<div class="phrase"
+     style="--radius:320px; --speed:24s;">
+    Eres increíble 🌷
+</div>
+
+<div class="phrase"
+     style="--radius:400px; --speed:29s;">
+    Quiero compartir muchos momentos contigo 💞
+</div>
+
+<div id="hint">
+    ✦ Hecho especialmente para SAKU ✦
+</div>
+
+
+<!-- THREE.JS -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
+<script>
+
+const scene = new THREE.Scene();
+
+scene.fog = new THREE.FogExp2(
+    0x02000b,
+    0.0007
+);
+
+
+const camera = new THREE.PerspectiveCamera(
+    65,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    3000
+);
+
+camera.position.z = 850;
+
+
+const renderer = new THREE.WebGLRenderer({
+    antialias: true
+});
+
+renderer.setPixelRatio(
+    Math.min(window.devicePixelRatio, 2)
+);
+
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+renderer.setClearColor(0x02000b);
+
+document
+    .getElementById("app")
+    .appendChild(renderer.domElement);
+
+
+/* =========================
+   GRUPO DEL CORAZÓN
+========================= */
+
+const heartGroup = new THREE.Group();
+
+scene.add(heartGroup);
+
+
+/* =========================
+   PARTÍCULAS
+========================= */
+
+const particleCount = 6500;
+
+const positions =
+    new Float32Array(particleCount * 3);
+
+const target =
+    new Float32Array(particleCount * 3);
+
+
+/* ECUACIÓN DEL CORAZÓN */
+
+function heartPoint(t) {
+
+    const x =
+        16 * Math.pow(Math.sin(t), 3);
+
+    const y =
+        13 * Math.cos(t)
+        - 5 * Math.cos(2 * t)
+        - 2 * Math.cos(3 * t)
+        - Math.cos(4 * t);
+
+    return {
+        x: x,
+        y: y
+    };
+}
+
+
+/* CREAR PARTÍCULAS */
+
+for (let i = 0; i < particleCount; i++) {
+
+    const t =
+        Math.random() *
+        Math.PI *
+        2;
+
+    const heart =
+        heartPoint(t);
+
+    const fill =
+        Math.sqrt(Math.random());
+
+    /* POSICIÓN FINAL */
+
+    target[i * 3] =
+        heart.x *
+        fill *
+        18;
+
+    target[i * 3 + 1] =
+        heart.y *
+        fill *
+        18;
+
+    target[i * 3 + 2] =
+        (Math.random() - .5)
+        * 150
+        * (1 - fill);
+
+
+    /* POSICIÓN INICIAL:
+       estrellas dispersas */
+
+    positions[i * 3] =
+        (Math.random() - .5)
+        * 1900;
+
+    positions[i * 3 + 1] =
+        (Math.random() - .5)
+        * 1100;
+
+    positions[i * 3 + 2] =
+        (Math.random() - .5)
+        * 1500;
+}
+
+
+/* GEOMETRÍA */
+
+const heartGeometry =
+    new THREE.BufferGeometry();
+
+heartGeometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(
+        positions,
+        3
+    )
+);
+
+
+/* MATERIAL */
+
+const heartMaterial =
+    new THREE.PointsMaterial({
+
+        color: 0xff69c9,
+
+        size: 3,
+
+        transparent: true,
+
+        opacity: .9,
+
+        blending:
+            THREE.AdditiveBlending,
+
+        depthWrite: false
+    });
+
+
+const heartParticles =
+    new THREE.Points(
+        heartGeometry,
+        heartMaterial
+    );
+
+heartGroup.add(
+    heartParticles
+);
+
+
+/* =========================
+   ESTRELLAS DEL UNIVERSO
+========================= */
+
+const starCount = 9000;
+
+const starPositions =
+    new Float32Array(
+        starCount * 3
+    );
+
+
+for (let i = 0; i < starCount; i++) {
+
+    starPositions[i * 3] =
+        (Math.random() - .5)
+        * 2400;
+
+    starPositions[i * 3 + 1] =
+        (Math.random() - .5)
+        * 1400;
+
+    starPositions[i * 3 + 2] =
+        (Math.random() - .5)
+        * 2200;
+}
+
+
+const starGeometry =
+    new THREE.BufferGeometry();
+
+starGeometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(
+        starPositions,
+        3
+    )
+);
+
+
+const starMaterial =
+    new THREE.PointsMaterial({
+
+        color: 0xffffff,
+
+        size: 1.5,
+
+        transparent: true,
+
+        opacity: .75
+    });
+
+
+const stars =
+    new THREE.Points(
+        starGeometry,
+        starMaterial
+    );
+
+scene.add(stars);
+
+
+/* =========================
+   ANIMACIÓN
+========================= */
+
+let startTime =
+    performance.now();
+
+
+function animate(now) {
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    /*
+       Durante los primeros
+       5 segundos las estrellas
+       empiezan a formar el corazón.
+    */
+
+    const progress =
+        Math.min(
+            (now - startTime) / 5000,
+            1
+        );
+
+
+    const ease =
+        progress *
+        progress *
+        (3 - 2 * progress);
+
+
+    for (
+        let i = 0;
+        i < particleCount;
+        i++
+    ) {
+
+        const j = i * 3;
+
+
+        positions[j] +=
+            (target[j] -
+            positions[j])
+            * 0.025
+            * ease;
+
+
+        positions[j + 1] +=
+            (target[j + 1] -
+            positions[j + 1])
+            * 0.025
+            * ease;
+
+
+        positions[j + 2] +=
+            (target[j + 2] -
+            positions[j + 2])
+            * 0.025
+            * ease;
+    }
+
+
+    heartGeometry
+        .attributes
+        .position
+        .needsUpdate = true;
+
+
+    /*
+       Movimiento 3D
+       del corazón
+    */
+
+    heartGroup.rotation.y =
+        now * 0.00008;
+
+
+    heartGroup.rotation.z =
+        Math.sin(
+            now * 0.00025
+        ) * 0.035;
+
+
+    /*
+       Movimiento suave
+       de la galaxia
+    */
+
+    stars.rotation.y =
+        now * 0.000015;
+
+
+    renderer.render(
+        scene,
+        camera
+    );
+}
+
+
+requestAnimationFrame(
+    animate
+);
+
+
+/* =========================
+   INTRO
+========================= */
+
+setTimeout(() => {
+
+    const intro =
+        document.getElementById(
+            "intro"
+        );
+
+    intro.style.opacity = "0";
+
+}, 2200);
+
+
+setTimeout(() => {
+
+    const intro =
+        document.getElementById(
+            "intro"
+        );
+
+    if (intro) {
+        intro.remove();
+    }
+
+}, 3800);
+
+
+/* =========================
+   REDIMENSIONAR
+========================= */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        camera.aspect =
+            window.innerWidth /
+            window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+    }
+);
+
+</script>
+
+</body>
+</html>
+```
